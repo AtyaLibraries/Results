@@ -15,6 +15,15 @@ public sealed class ResultTests
     }
 
     [Fact]
+    public void Success_ReusesSingleton()
+    {
+        var first = Result.Success();
+        var second = Result.Success();
+
+        first.Should().BeSameAs(second);
+    }
+
+    [Fact]
     public void Success_Error_Throws()
     {
         var result = Result.Success();
