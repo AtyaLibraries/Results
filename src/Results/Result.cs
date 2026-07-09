@@ -5,6 +5,8 @@ namespace Atya.Foundation.Results;
 /// </summary>
 public sealed record class Result
 {
+    private static readonly Result SuccessInstance = new(isSuccess: true, error: null);
+
     private readonly Error? _error;
 
     private Result(bool isSuccess, Error? error)
@@ -36,7 +38,7 @@ public sealed record class Result
     /// Creates a successful result.
     /// </summary>
     /// <returns>A successful result.</returns>
-    public static Result Success() => new(isSuccess: true, error: null);
+    public static Result Success() => SuccessInstance;
 
     /// <summary>
     /// Creates a failed result.

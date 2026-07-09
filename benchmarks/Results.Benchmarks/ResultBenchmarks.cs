@@ -16,6 +16,13 @@ public class ResultBenchmarks
     private readonly Result<int> _success = Result.Success(42);
 
     /// <summary>
+    /// Creates a successful untyped result.
+    /// </summary>
+    /// <returns>The created result.</returns>
+    [Benchmark]
+    public Result CreateUntypedSuccess() => Result.Success();
+
+    /// <summary>
     /// Creates a successful typed result.
     /// </summary>
     /// <returns>The created result.</returns>
