@@ -12,7 +12,7 @@
     <PackageTags>dotnet;atya;foundation;results;errors</PackageTags>
     <RepositoryUrl>https://github.com/AtyaLibraries/Results</RepositoryUrl>
     <PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
-    <PackageValidationBaselineVersion>1.0.0</PackageValidationBaselineVersion>
+    <PackageValidationBaselineVersion>1.1.0</PackageValidationBaselineVersion>
 
     <!-- MinVer derives the version from git tags (e.g. tag `v1.2.3` -> 1.2.3). -->
     <MinVerTagPrefix>v</MinVerTagPrefix>
