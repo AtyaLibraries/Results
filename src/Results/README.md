@@ -56,7 +56,7 @@ The console sample compiles this same pattern: https://github.com/AtyaLibraries/
 
 ### Error
 
-`Error` carries a stable code, a human-readable message, and an `ErrorKind`.
+`Error` carries a stable code, a human-readable message, an `ErrorKind`, an optional `Target`, and child `Details`.
 
 ```csharp
 var error = new Error(
@@ -64,6 +64,26 @@ var error = new Error(
     "The requested item was not found.",
     ErrorKind.NotFound);
 ```
+
+Use `Target` for the field, property, or resource the error applies to. Use `Details` for structured child errors, such as one child per validation failure.
+
+```csharp
+var error = new Error(
+    "atya.foundation.results.validation",
+    "Validation failed.",
+    target: null,
+    details:
+    [
+        new Error(
+            "atya.foundation.results.name-required",
+            "A name is required.",
+            target: "Name",
+            kind: ErrorKind.Validation),
+    ],
+    kind: ErrorKind.Validation);
+```
+
+`Details` is never `null`; constructors copy the supplied child list. Error equality is structural: `Code`, `Message`, `Kind`, `Target`, and the ordered child `Details` all participate in equality and hash-code generation.
 
 ### Result
 
