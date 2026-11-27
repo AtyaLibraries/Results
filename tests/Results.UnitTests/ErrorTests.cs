@@ -168,4 +168,51 @@ public sealed class ErrorTests
 
         first.Should().NotBe(second);
     }
+
+    [Fact]
+    public void Details_Should_Not_Be_Castable_To_A_Mutable_Array_Or_List()
+    {
+        var detail = new Error("child", "Child error.");
+        var error = new Error("parent", "Parent error.", target: null, details: [detail]);
+        int hashBefore = error.GetHashCode();
+
+        (error.Details is Error[]).Should().BeFalse();
+        (error.Details is List<Error>).Should().BeFalse();
+        Action mutate = () => ((IList<Error>)error.Details)[0] = new Error("other", "Other.");
+        mutate.Should().Throw<NotSupportedException>();
+
+        error.Details.Should().ContainSingle().Which.Should().Be(detail);
+        error.GetHashCode().Should().Be(hashBefore);
+    }
+
+    [Fact]
+    public void Details_Should_Be_A_Snapshot_Of_The_Input_Collection()
+    {
+        var input = new List<Error> { new("child", "Child error.") };
+        var error = new Error("parent", "Parent error.", target: null, details: input);
+
+        input.Add(new Error("late", "Added after construction."));
+        input[0] = new Error("replaced", "Replaced after construction.");
+
+        error.Details.Should().ContainSingle().Which.Code.Should().Be("child");
+    }
+
+    [Fact]
+    public void Empty_Details_Should_Not_Be_A_Mutable_Array()
+    {
+        var error = new Error("parent", "Parent error.");
+
+        (error.Details is Error[]).Should().BeFalse();
+        error.Details.Should().BeEmpty();
+    }
+
+    [Theory]
+    [InlineData(ErrorKind.Unavailable, 7)]
+    [InlineData(ErrorKind.Timeout, 8)]
+    [InlineData(ErrorKind.TooManyRequests, 9)]
+    public void ErrorKind_Should_Expose_Transient_Failure_Kinds_With_Stable_Values(ErrorKind kind, int value)
+    {
+        ((int)kind).Should().Be(value);
+        new Error("code", "message", kind).Kind.Should().Be(kind);
+    }
 }

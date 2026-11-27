@@ -202,4 +202,15 @@ public sealed class ResultOfTTests
 
         untyped.Error.Should().Be(FailureError);
     }
+
+    [Fact]
+    public void ToString_Should_Be_Total_And_Never_Emit_The_Success_Value()
+    {
+        Result<string> success = Result.Success("secret-value");
+        Result<string> failure = Result.Failure<string>(new Error("orders.missing", "Missing."));
+
+        success.ToString().Should().Be("Success");
+        failure.ToString().Should().Be("Failure(orders.missing)");
+        $"{success}|{failure}".Should().NotContain("secret-value");
+    }
 }

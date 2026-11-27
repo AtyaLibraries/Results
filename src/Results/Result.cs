@@ -35,6 +35,12 @@ public sealed record class Result
             : throw new InvalidOperationException("A successful result does not have an error.");
 
     /// <summary>
+    /// Returns a stable, total description of the result that never exposes a success value.
+    /// </summary>
+    /// <returns><c>Success</c> or <c>Failure(code)</c>.</returns>
+    public override string ToString() => IsSuccess ? "Success" : $"Failure({_error!.Code})";
+
+    /// <summary>
     /// Creates a successful result.
     /// </summary>
     /// <returns>A successful result.</returns>
