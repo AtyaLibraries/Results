@@ -39,4 +39,19 @@ public enum ErrorKind
     /// The operation failed in an unexpected but reportable way.
     /// </summary>
     Unexpected = 6,
+
+    /// <summary>
+    /// A dependency or the service itself is temporarily unavailable.
+    /// </summary>
+    Unavailable = 7,
+
+    /// <summary>
+    /// The operation did not complete within its allotted time.
+    /// </summary>
+    Timeout = 8,
+
+    /// <summary>
+    /// The caller exceeded a rate or quota limit.
+    /// </summary>
+    TooManyRequests = 9,
 }

@@ -170,4 +170,13 @@ public sealed class ResultTests
 
         action.Should().Throw<InvalidOperationException>();
     }
+
+    [Fact]
+    public void ToString_Should_Be_Total_And_Stable_In_Both_States()
+    {
+        Result.Success().ToString().Should().Be("Success");
+        Result.Failure("orders.missing", "Missing.", ErrorKind.NotFound).ToString().Should().Be("Failure(orders.missing)");
+        $"{Result.Success()}".Should().Be("Success");
+        string.Concat(Result.Failure("a.b", "m")).Should().Be("Failure(a.b)");
+    }
 }

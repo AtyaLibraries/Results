@@ -44,6 +44,12 @@ public sealed record class Result<TValue>
             ? _error!
             : throw new InvalidOperationException("A successful result does not have an error.");
 
+    /// <summary>
+    /// Returns a stable, total description of the result that never exposes the success value.
+    /// </summary>
+    /// <returns><c>Success</c> or <c>Failure(code)</c>.</returns>
+    public override string ToString() => IsSuccess ? "Success" : $"Failure({_error!.Code})";
+
     internal static Result<TValue> CreateSuccess(TValue value) => new(isSuccess: true, value, error: null);
 
     internal static Result<TValue> CreateFailure(Error error) =>

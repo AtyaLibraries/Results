@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Atya.Foundation.Results;
@@ -15,6 +16,8 @@ namespace Atya.Foundation.Results;
     Justification = "The package models a domain error and exposes the canonical Error type.")]
 public sealed record class Error
 {
+    private static readonly ReadOnlyCollection<Error> s_noDetails = Array.AsReadOnly(Array.Empty<Error>());
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Error"/> class.
     /// </summary>
@@ -126,11 +129,11 @@ public sealed record class Error
         return hash.ToHashCode();
     }
 
-    private static Error[] CopyDetails(IReadOnlyList<Error>? details)
+    private static ReadOnlyCollection<Error> CopyDetails(IReadOnlyList<Error>? details)
     {
         if (details is null || details.Count == 0)
         {
-            return Array.Empty<Error>();
+            return s_noDetails;
         }
 
         var copy = new Error[details.Count];
@@ -139,6 +142,7 @@ public sealed record class Error
             copy[index] = details[index] ?? throw new ArgumentNullException(nameof(details));
         }
 
-        return copy;
+        // The wrapper hides the backing array: it cannot be cast back to Error[] and rejects IList<T> mutation.
+        return Array.AsReadOnly(copy);
     }
 }
