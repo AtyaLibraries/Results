@@ -57,7 +57,7 @@ The console sample under `samples/Results.Samples.Console` compiles this same pa
 
 ### Error
 
-`Error` carries a stable code, a human-readable message, an `ErrorKind`, an optional `Target`, and child `Details`.
+`Error` carries a stable code, a human-readable message, an `ErrorKind`, an optional `Target`, and child `Details`. `Details` is an immutable snapshot. `ErrorKind` includes the transient kinds `Unavailable` (7), `Timeout` (8) and `TooManyRequests` (9). `ToString()` on `Result` and `Result<T>` never throws and never prints the success value (`Success` or `Failure(code)`).
 
 ```csharp
 var error = new Error(
